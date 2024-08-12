@@ -20,16 +20,6 @@ boot.supportedFilesystems = [ "ntfs" ];
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.grub.device = "nodev";
   boot.loader.grub.useOSProber = true;
-  boot.loader.grub.extraEntries = ''
-  	menuentry "Windows Boot Manager (on /dev/sda1)" --class windows --class os {
-          insmod part_gpt
-          insmod fat
-          insmod search_fs_uuid
-          insmod chain
-          search --fs-uuid --set=root $FS_UUID
-          chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-        }
-      '';
  # boot.loader.systemd-boot.enable = true;
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -111,6 +101,9 @@ boot.supportedFilesystems = [ "ntfs" ];
   # Install firefox.
   programs.firefox.enable = true;
 
+  #configuration needed for trezor
+services.trezord.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 #exclude dumb gnome packages
@@ -130,6 +123,7 @@ environment.gnome.excludePackages = (with pkgs; [
   #gnome extensions
   gnomeExtensions.dock-from-dash
   gnomeExtensions.caffeine
+  gnomeExtensions.appindicator
 
   vim
   neofetch
@@ -153,9 +147,12 @@ environment.gnome.excludePackages = (with pkgs; [
   freetube
   gnome.gnome-weather
   libreoffice
-  spotify
-  spicetify-cli
   os-prober
+  brave
+  #crypto crap
+  trezor-suite
+  monero-gui
+  feather
   #windows stuff
   ntfs3g
   ms-sys
